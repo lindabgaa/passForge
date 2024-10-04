@@ -1,8 +1,33 @@
-# React + Vite
+# Password Generator - React/Vite project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Project Status](https://img.shields.io/badge/Project%20Status-In%20Progress-orange)
+[![CodeFactor](https://www.codefactor.io/repository/github/lindabgaa/password-generator/badge)](https://www.codefactor.io/repository/github/lindabgaa/password-generator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-Currently, two official plugins are available:
+This project is a user-friendly password generator built with **JavaScript**, **React**, and **CSS**. It uses the Vite build tool for fast development. The app provides a sleek interface that enables users to create secure and customizable passwords with just a few clicks. Users can specify criteria such as length and character types, ensuring their passwords meet specific security requirements.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+## Tech Stack
+
+- JavaScript (ES6+)
+- React with Vite build tool
+- CSS
+
+## Plugins / Libraries
+
+- **@vitejs/plugin-react** uses **Babel** for Fast Refresh
+
+## Installation & Setup
+
+## Usage
+
+## Future Improvements
+
+## Demo
+
+## Contributing
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.

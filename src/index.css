@@ -2,10 +2,16 @@
   font-size: 62.5%;
 
   --clr-white: #fff;
+
   --clr-grey-100: #e6e6e6;
-  --clr-grey-500: #293241;
-  --clr-green: #57cc99;
-  --clr-red: #bc4749;
+  --clr-grey-200: #c9cbcd;
+
+  --clr-blue-100: #e0f1fe;
+  --clr-blue-200: #69aefd;
+  --clr-blue-300: #0571ed;
+  --clr-blue-400: #0451b3;
+
+  --clr-red: #d90429;
 }
 
 *,
@@ -18,14 +24,13 @@
 
 body,
 html {
-  height: 100%;
+  height: 100vh;
 }
 
 body {
-  font-weight: 500;
   font-size: 1.6rem;
   font-family: "Poppins", sans-serif;
-  background-color: var(--clr-grey-500);
+  background-color: var(--clr-white);
 
   display: grid;
   place-content: center;

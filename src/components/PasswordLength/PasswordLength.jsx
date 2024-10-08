@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
 // styles
-import styles from "./PasswordLength.module.css";
+import "./PasswordLength.css";
 
 export default function PasswordLength({ passwordLength, setPasswordLength }) {
   const rangeRef = useRef(null);
 
   // ---- Function to handle range input change
   const handleInputRangeChange = (e) => {
-    const value = e.target.value;
+    const value = parseInt(e.target.value, 10);
     setPasswordLength(value);
   };
 
@@ -18,17 +18,28 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
   const updateRangeProgress = (value) => {
     const range = rangeRef.current;
     const rangeProgress = (value / range.max) * 100;
-    range.style.background = `linear-gradient(to right, #293241 ${rangeProgress}%, #e6e6e6 ${rangeProgress}%)`;
+    range.style.background = `linear-gradient(to right, #0571ed ${rangeProgress}%, #e6e6e6 ${rangeProgress}%)`;
   };
 
-  // ---- UseEffect to update range progress on length change
+  // ---- useEffect to update range progress on length change
   useEffect(() => {
-    updateRangeProgress(length);
+    updateRangeProgress(passwordLength);
   }, [passwordLength]);
 
   // ---- Function to handle number input change
   const handleInputNumberChange = (e) => {
     let value = e.target.value;
+
+    if (value === "") {
+      setPasswordLength("");
+      return;
+    }
+
+    if (isNaN(value)) {
+      return;
+    }
+
+    value = parseInt(value, 10);
 
     if (value > 100) {
       value = 100;
@@ -39,7 +50,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
 
   // Function to handle number input blur
   const handleInputNumberBlur = (e) => {
-    let value = e.target.value;
+    let value = parseInt(e.target.value, 10);
 
     if (value < 7) {
       value = 7;
@@ -49,15 +60,15 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
   };
 
   return (
-    <div className={styles.container}>
-      <p>Character</p>
+    <div className="length-wrapper">
+      <span>Character</span>
       <input
         ref={rangeRef}
         type="range"
         min="7"
         max="100"
-        value={!passwordLength ? 7 : passwordLength}
-        className={styles.lengthSlider}
+        value={passwordLength ? passwordLength : 7}
+        className="length-slider"
         onChange={handleInputRangeChange}
       ></input>
       <input
@@ -65,7 +76,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
         min="7"
         max="100"
         value={passwordLength}
-        className={styles.lengthInput}
+        className="length-input"
         onChange={handleInputNumberChange}
         onBlur={handleInputNumberBlur}
       ></input>
@@ -74,6 +85,9 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
 }
 
 PasswordLength.propTypes = {
-  passwordLength: PropTypes.string.isRequired,
+  passwordLength: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([""]),
+  ]),
   setPasswordLength: PropTypes.func.isRequired,
 };

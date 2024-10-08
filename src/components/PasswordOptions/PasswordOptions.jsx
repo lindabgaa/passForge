@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 // styles
-import styles from "./PasswordOptions.module.css";
+import "./PasswordOptions.css";
 
 export default function PasswordOptions({
   passwordOptions,
@@ -57,48 +57,48 @@ export default function PasswordOptions({
   }, [passwordOptions]);
 
   return (
-    <ul className={styles.list}>
-      <li className={styles.item}>
+    <ul className="options-list">
+      <li className="options-item">
         <label htmlFor="uppercase">Uppercase Letters</label>
         <input
           checked={passwordOptions.uppercase}
           disabled={disabledOptions.uppercase}
           type="checkbox"
           id="uppercase"
-          className={styles.input}
+          className="option-input"
           onChange={handleOptionsChange}
         ></input>
       </li>
-      <li className={styles.item}>
+      <li className="options-item">
         <label htmlFor="lowercase">Lowercase Letters</label>
         <input
           checked={passwordOptions.lowercase}
           disabled={disabledOptions.lowercase}
           type="checkbox"
           id="lowercase"
-          className={styles.input}
+          className="option-input"
           onChange={handleOptionsChange}
         ></input>
       </li>
-      <li className={styles.item}>
+      <li className="options-item">
         <label htmlFor="numbers">Numbers</label>
         <input
           checked={passwordOptions.numbers}
           disabled={disabledOptions.numbers}
           type="checkbox"
           id="numbers"
-          className={styles.input}
+          className="option-input"
           onChange={handleOptionsChange}
         ></input>
       </li>
-      <li className={styles.item}>
+      <li className="options-item">
         <label htmlFor="symbols">Symbols (@&$!#?)</label>
         <input
           checked={passwordOptions.symbols}
           disabled={disabledOptions.symbols}
           type="checkbox"
           id="symbols"
-          className={styles.input}
+          className="option-input"
           onChange={handleOptionsChange}
         ></input>
       </li>

@@ -10,8 +10,8 @@ import PasswordOptions from "./components/PasswordOptions/PasswordOptions";
 import "./App.css";
 
 export default function App() {
-  const [passwordLength, setPasswordLength] = useState("7");
-  const [password, setPassword] = useState("P4$5W0rD!");
+  const [copySuccess, setCopySuccess] = useState(null);
+  const [passwordLength, setPasswordLength] = useState(7);
   const [passwordOptions, setPasswordOptions] = useState({
     uppercase: true,
     lowercase: true,
@@ -21,7 +21,11 @@ export default function App() {
 
   return (
     <main className="main-container">
-      <PasswordDisplay password={password} />
+      <PasswordDisplay
+        setCopySuccess={setCopySuccess}
+        passwordLength={passwordLength}
+        passwordOptions={passwordOptions}
+      />
 
       <div className="input-wrapper">
         <PasswordLength
@@ -33,6 +37,12 @@ export default function App() {
           setPasswordOptions={setPasswordOptions}
         />
       </div>
+
+      {copySuccess === true ? (
+        <p className="copy-success">Copied generated password</p>
+      ) : copySuccess === false ? (
+        <p className="copy-error">Failed to copy generated password</p>
+      ) : null}
     </main>
   );
 }

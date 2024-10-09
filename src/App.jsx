@@ -11,38 +11,66 @@ import "./App.css";
 
 export default function App() {
   const [copySuccess, setCopySuccess] = useState(null);
-  const [passwordLength, setPasswordLength] = useState(7);
+  const [passwordLength, setPasswordLength] = useState(20);
   const [passwordOptions, setPasswordOptions] = useState({
-    uppercase: true,
-    lowercase: true,
-    numbers: true,
-    symbols: false,
+    uppercase: {
+      checked: true,
+      label: "Uppercase Letters",
+      disabled: false,
+    },
+    lowercase: {
+      checked: true,
+      label: "Lowercase Letters",
+      disabled: false,
+    },
+    numbers: {
+      checked: true,
+      label: "Numbers",
+      disabled: false,
+    },
+    symbols: {
+      checked: true,
+      label: "Symbols (@&$!#?)",
+      disabled: false,
+    },
   });
 
   return (
     <main className="main-container">
-      <PasswordDisplay
-        setCopySuccess={setCopySuccess}
-        passwordLength={passwordLength}
-        passwordOptions={passwordOptions}
-      />
-
-      <div className="input-wrapper">
-        <PasswordLength
+      <div className="content-wrapper">
+        <PasswordDisplay
+          setCopySuccess={setCopySuccess}
           passwordLength={passwordLength}
-          setPasswordLength={setPasswordLength}
-        />
-        <PasswordOptions
           passwordOptions={passwordOptions}
-          setPasswordOptions={setPasswordOptions}
         />
+
+        <div className="input-wrapper">
+          <PasswordLength
+            passwordLength={passwordLength}
+            setPasswordLength={setPasswordLength}
+          />
+          <PasswordOptions
+            passwordOptions={passwordOptions}
+            setPasswordOptions={setPasswordOptions}
+          />
+        </div>
       </div>
 
-      {copySuccess === true ? (
-        <p className="copy-success">Copied generated password</p>
-      ) : copySuccess === false ? (
-        <p className="copy-error">Failed to copy generated password</p>
-      ) : null}
+      <p
+        className={`copy-message ${
+          copySuccess === true
+            ? "copy-valid"
+            : copySuccess === false
+            ? "copy-error"
+            : ""
+        }`}
+      >
+        {copySuccess === true
+          ? "Copied generated password"
+          : copySuccess === false
+          ? " Failed to copy generated password. Please try again."
+          : ""}
+      </p>
     </main>
   );
 }

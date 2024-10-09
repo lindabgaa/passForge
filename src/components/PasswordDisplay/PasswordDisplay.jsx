@@ -17,14 +17,21 @@ export default function PasswordDisplay({
   passwordLength,
   passwordOptions,
 }) {
+  // ---- Characters to generate password from
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=!?#@&*%$+-";
+
+  // ---- State to store generated password
   const [password, setPassword] = useState("");
 
   // ---- Function to generate password based on password length and options
   const generatePassword = useCallback(() => {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=!?#@&*%$+-";
-
-    const { uppercase, lowercase, numbers, symbols } = passwordOptions;
+    const {
+      uppercase: { checked: uppercaseChecked },
+      lowercase: { checked: lowercaseChecked },
+      numbers: { checked: numbersChecked },
+      symbols: { checked: symbolsChecked },
+    } = passwordOptions;
 
     const selectedLength = Math.max(passwordLength, 7); // Make sure password length is at least 7 characters
     let selectedCharacters = []; // Array to store selected characters based on selected options
@@ -37,19 +44,19 @@ export default function PasswordDisplay({
       );
     };
 
-    if (uppercase) {
+    if (uppercaseChecked) {
       addCharacters(0, 26, 26);
     }
 
-    if (lowercase) {
+    if (lowercaseChecked) {
       addCharacters(26, 52, 26);
     }
 
-    if (numbers) {
+    if (numbersChecked) {
       addCharacters(52, 62, 10);
     }
 
-    if (symbols) {
+    if (symbolsChecked) {
       addCharacters(62, 73, 11);
     }
 
@@ -145,11 +152,30 @@ export default function PasswordDisplay({
 
 PasswordDisplay.propTypes = {
   setCopySuccess: PropTypes.func.isRequired,
-  passwordLength: PropTypes.number.isRequired,
+  passwordLength: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([""]),
+  ]),
   passwordOptions: PropTypes.shape({
-    uppercase: PropTypes.bool.isRequired,
-    lowercase: PropTypes.bool.isRequired,
-    numbers: PropTypes.bool.isRequired,
-    symbols: PropTypes.bool.isRequired,
+    uppercase: PropTypes.shape({
+      checked: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      disabled: PropTypes.bool.isRequired,
+    }).isRequired,
+    lowercase: PropTypes.shape({
+      checked: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      disabled: PropTypes.bool.isRequired,
+    }).isRequired,
+    numbers: PropTypes.shape({
+      checked: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      disabled: PropTypes.bool.isRequired,
+    }).isRequired,
+    symbols: PropTypes.shape({
+      checked: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      disabled: PropTypes.bool.isRequired,
+    }).isRequired,
   }).isRequired,
 };

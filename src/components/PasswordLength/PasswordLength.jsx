@@ -52,7 +52,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
   const handleInputNumberBlur = (e) => {
     let value = parseInt(e.target.value, 10);
 
-    if (value < 7) {
+    if (value < 7 || isNaN(value)) {
       value = 7;
     }
 
@@ -61,14 +61,17 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
 
   return (
     <div className="length-wrapper">
-      <span>Character</span>
+      <label id="password-length-label" className="length-label">
+        Character
+      </label>
       <input
         ref={rangeRef}
         type="range"
         min="7"
         max="100"
-        value={passwordLength ? passwordLength : 7}
+        value={passwordLength || 7}
         className="length-slider"
+        aria-labelledby="password-length-label"
         onChange={handleInputRangeChange}
       ></input>
       <input
@@ -77,6 +80,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
         max="100"
         value={passwordLength}
         className="length-input"
+        aria-labelledby="password-length-label"
         onChange={handleInputNumberChange}
         onBlur={handleInputNumberBlur}
       ></input>

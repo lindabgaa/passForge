@@ -32,7 +32,7 @@ This project is a user-friendly password generator built with **JavaScript**, **
 3. Install dependencies: `npm install`
 4. Install libraries:
    - If you’re using PropTypes for type-checking, install it by running: `npm install prop-types`
-5. Run the development server: npm run dev
+5. Run the development server: `npm run dev`
 
 ## Usage
 
@@ -42,7 +42,7 @@ This project is a user-friendly password generator built with **JavaScript**, **
 
 ## Demo
 
-A live demo of the Password Generator can be found here [securegenpass.netlify.app](securegenpass.netlify.app)
+A live demo of the Password Generator can be found here [securegenpass.netlify.app](https://securegenpass.netlify.app/)
 
 ## Contributing
 

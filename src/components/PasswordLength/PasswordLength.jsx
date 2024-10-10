@@ -35,28 +35,19 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
       return;
     }
 
-    if (isNaN(value)) {
+    value = parseInt(value, 10);
+
+    if (Number.isNaN(value)) {
       return;
     }
 
-    value = parseInt(value, 10);
-
-    if (value > 100) {
-      value = 100;
-    }
-
-    setPasswordLength(value);
+    setPasswordLength(Math.min(value, 100) || 100);
   };
 
   // Function to handle number input blur
   const handleInputNumberBlur = (e) => {
     let value = parseInt(e.target.value, 10);
-
-    if (value < 7 || isNaN(value)) {
-      value = 7;
-    }
-
-    setPasswordLength(value);
+    setPasswordLength(Math.max(value, 7) || 7);
   };
 
   return (
@@ -89,9 +80,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
 }
 
 PasswordLength.propTypes = {
-  passwordLength: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([""]),
-  ]),
+  passwordLength: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([""])])
+    .isRequired,
   setPasswordLength: PropTypes.func.isRequired,
 };

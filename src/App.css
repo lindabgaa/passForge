@@ -1,17 +1,12 @@
 main.main-container {
-  width: 40rem;
+  max-width: 40rem;
+  width: 100vw;
+  padding: 2rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-@media screen and (max-width: 450px) {
-  main.main-container {
-    width: 100vw;
-    padding: 2rem;
-  }
 }
 
 p.copy-message {

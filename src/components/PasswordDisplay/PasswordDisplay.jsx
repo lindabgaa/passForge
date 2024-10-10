@@ -19,55 +19,89 @@ export default function PasswordDisplay({
 }) {
   // ---- Characters to generate password from
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=!?#@&*%$+-";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?#@&*%$+";
 
   // ---- State to store generated password
   const [password, setPassword] = useState("");
 
   // ---- Function to generate password based on password length and options
   const generatePassword = useCallback(() => {
-    const {
-      uppercase: { checked: uppercaseChecked },
-      lowercase: { checked: lowercaseChecked },
-      numbers: { checked: numbersChecked },
-      symbols: { checked: symbolsChecked },
-    } = passwordOptions;
+    // Get checked value of each option
+    const uppercaseChecked = passwordOptions.find(
+      (option) => option.id === "uppercase"
+    ).checked;
+
+    const lowercaseChecked = passwordOptions.find(
+      (option) => option.id === "lowercase"
+    ).checked;
+
+    const numbersChecked = passwordOptions.find(
+      (option) => option.id === "numbers"
+    ).checked;
+
+    const symbolsChecked = passwordOptions.find(
+      (option) => option.id === "symbols"
+    ).checked;
 
     const selectedLength = Math.max(passwordLength, 7); // Make sure password length is at least 7 characters
-    let selectedCharacters = []; // Array to store selected characters based on selected options
-    let guaranteedCharacters = []; // Array to store at least one character from each selected option
+    const selectedCharacters = []; // Array to store selected characters based on selected options
+    const guaranteedCharacters = []; // Array to store at least one character from each selected option
 
-    const addCharacters = (start, end, count) => {
+    // Constants to store start index of each character type in characters string
+    const UPPERCASE_START = 0;
+    const LOWERCASE_START = 26;
+    const NUMBERS_START = 52;
+    const SYMBOLS_START = 62;
+
+    // Constants to store count of each character type
+    const UPPERCASE_COUNT = 26;
+    const LOWERCASE_COUNT = 26;
+    const NUMBERS_COUNT = 10;
+    const SYMBOLS_COUNT = 9;
+
+    // Function to add characters to selectedCharacters and guaranteedCharacters arrays based on selected options
+    const addCharacters = (start, count) => {
+      const end = start + count;
       selectedCharacters.push(...characters.slice(start, end).split(""));
       guaranteedCharacters.push(
         characters.charAt(Math.floor(Math.random() * count) + start)
       );
     };
 
+    // Add uppercase characters to selectedCharacters and guaranteedCharacters if uppercase option is checked
     if (uppercaseChecked) {
-      addCharacters(0, 26, 26);
+      addCharacters(UPPERCASE_START, UPPERCASE_COUNT);
     }
 
+    // Add lowercase characters to selectedCharacters and guaranteedCharacters if lowercase option is checked
     if (lowercaseChecked) {
-      addCharacters(26, 52, 26);
+      addCharacters(LOWERCASE_START, LOWERCASE_COUNT);
     }
 
+    // Add numbers to selectedCharacters and guaranteedCharacters if numbers option is checked
     if (numbersChecked) {
-      addCharacters(52, 62, 10);
+      addCharacters(NUMBERS_START, NUMBERS_COUNT);
     }
 
+    // Add symbols to selectedCharacters and guaranteedCharacters if symbols option is checked
     if (symbolsChecked) {
-      addCharacters(62, 73, 11);
+      addCharacters(SYMBOLS_START, SYMBOLS_COUNT);
     }
 
-    let generatedPassword = "";
-    generatedPassword += guaranteedCharacters.join("");
+    // Shuffle selected characters for better randomness
+    const shuffledSelectedCharacters = shuffleArray(selectedCharacters);
+
+    let generatedPassword = [];
+    generatedPassword.push(...guaranteedCharacters); // Add guaranteed characters
     for (let i = 0; i < selectedLength - guaranteedCharacters.length; i++) {
-      const randomIndex = Math.floor(Math.random() * selectedCharacters.length);
-      generatedPassword += selectedCharacters[randomIndex];
+      const randomIndex = Math.floor(
+        Math.random() * shuffledSelectedCharacters.length
+      );
+      generatedPassword.push(shuffledSelectedCharacters[randomIndex]); // Add random characters from selected options
     }
 
-    generatedPassword = shuffleArray(generatedPassword.split("")).join("");
+    // Shuffle generated password for better randomness and make it a string
+    generatedPassword = shuffleArray(generatedPassword).join("");
 
     setPassword(generatedPassword);
   }, [passwordLength, passwordOptions]);
@@ -104,78 +138,59 @@ export default function PasswordDisplay({
   };
 
   return (
-    <>
-      <div className="password-wrapper">
-        <p className="password-text">
-          {password.split("").map(function (char, index) {
-            return (
-              <span
-                key={index}
-                style={{
-                  color: Number.isInteger(parseInt(char))
-                    ? "#0571ed"
-                    : /[!?%@#=+$&*-]/.test(char)
-                    ? "#d90429"
-                    : "black",
-                }}
-              >
-                {char}
-              </span>
-            );
-          })}
-        </p>
-        <button
-          type="button"
-          className="generate-button"
-          aria-label="Generate new password"
-          onClick={handleGenerateButtonClick}
-        >
-          <img
-            src={generateIcon}
-            alt=""
-            className="generate-icon"
-            aria-hidden="true"
-          ></img>
-        </button>
-        <button
-          type="button"
-          className="copy-button"
-          aria-label="Copy password"
-          onClick={handleCopyButtonClick}
-        >
-          <img src={copyIcon} alt="" className="copy-icon" aria-hidden="true" />
-        </button>
-      </div>
-    </>
+    <div className="password-wrapper">
+      <p className="password-text">
+        {password.split("").map(function (char, index) {
+          return (
+            <span
+              key={index}
+              className={`password-char
+                ${
+                  Number.isInteger(parseInt(char))
+                    ? "number"
+                    : /[!?%@#+$&*]/.test(char)
+                    ? "special"
+                    : ""
+                }
+              `}
+            >
+              {char}
+            </span>
+          );
+        })}
+      </p>
+      <button
+        type="button"
+        className="generate-button"
+        onClick={handleGenerateButtonClick}
+      >
+        <img
+          src={generateIcon}
+          alt="Generate new password"
+          className="generate-icon"
+        ></img>
+      </button>
+      <button
+        type="button"
+        className="copy-button"
+        onClick={handleCopyButtonClick}
+      >
+        <img src={copyIcon} alt="Copy password" className="copy-icon" />
+      </button>
+    </div>
   );
 }
 
 PasswordDisplay.propTypes = {
   setCopySuccess: PropTypes.func.isRequired,
-  passwordLength: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([""]),
-  ]),
-  passwordOptions: PropTypes.shape({
-    uppercase: PropTypes.shape({
+  passwordLength: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([""])])
+    .isRequired,
+  passwordOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
       checked: PropTypes.bool.isRequired,
       label: PropTypes.string.isRequired,
       disabled: PropTypes.bool.isRequired,
-    }).isRequired,
-    lowercase: PropTypes.shape({
-      checked: PropTypes.bool.isRequired,
-      label: PropTypes.string.isRequired,
-      disabled: PropTypes.bool.isRequired,
-    }).isRequired,
-    numbers: PropTypes.shape({
-      checked: PropTypes.bool.isRequired,
-      label: PropTypes.string.isRequired,
-      disabled: PropTypes.bool.isRequired,
-    }).isRequired,
-    symbols: PropTypes.shape({
-      checked: PropTypes.bool.isRequired,
-      label: PropTypes.string.isRequired,
-      disabled: PropTypes.bool.isRequired,
-    }).isRequired,
-  }).isRequired,
+    }).isRequired
+  ).isRequired,
 };

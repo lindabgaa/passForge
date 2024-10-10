@@ -12,28 +12,32 @@ import "./App.css";
 export default function App() {
   const [copySuccess, setCopySuccess] = useState(null);
   const [passwordLength, setPasswordLength] = useState(20);
-  const [passwordOptions, setPasswordOptions] = useState({
-    uppercase: {
+  const [passwordOptions, setPasswordOptions] = useState([
+    {
+      id: "uppercase",
       checked: true,
       label: "Uppercase Letters",
       disabled: false,
     },
-    lowercase: {
+    {
+      id: "lowercase",
       checked: true,
       label: "Lowercase Letters",
       disabled: false,
     },
-    numbers: {
+    {
+      id: "numbers",
       checked: true,
       label: "Numbers",
       disabled: false,
     },
-    symbols: {
+    {
+      id: "symbols",
       checked: true,
-      label: "Symbols (@&$!#?)",
+      label: "Symbols (!?#@&*%$+)",
       disabled: false,
     },
-  });
+  ]);
 
   return (
     <main className="main-container">

@@ -8,6 +8,12 @@ This project is a user-friendly password generator built with **JavaScript**, **
 
 ## Features
 
+- **Customizable Length**: Select the desired password length.
+- **Character Type Selection**: Choose from uppercase, lowercase, numbers, and special characters.
+- **One-click Copy**: Easily copy generated passwords.
+- **Responsive design**: Optimized for different screen sizes.
+- **Random Password Generation**: Unique and secure passwords every time.
+
 ## Tech Stack
 
 - JavaScript (ES6+)
@@ -17,14 +23,26 @@ This project is a user-friendly password generator built with **JavaScript**, **
 ## Plugins / Libraries
 
 - **@vitejs/plugin-react** uses **Babel** for Fast Refresh
+- **_PropTypes_**: A library used for type-checking React component props, helping to ensure that components receive the correct data types.
 
 ## Installation & Setup
+
+1. Clone the repository: git clone `https://github.com/lindabgaa/password-generator.git`
+2. Navigate to the project directory: `cd password-generator`
+3. Install dependencies: `npm install`
+4. Install libraries:
+   - If you’re using PropTypes for type-checking, install it by running: `npm install prop-types`
+5. Run the development server: npm run dev
 
 ## Usage
 
 ## Future Improvements
 
+- Add a visual feedback on password strength.
+
 ## Demo
+
+A live demo of the Password Generator can be found here [securegenpass.netlify.app](securegenpass.netlify.app)
 
 ## Contributing
 

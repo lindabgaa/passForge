@@ -51,7 +51,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
   };
 
   return (
-    <div className="length-wrapper">
+    <div className="length-container">
       <label id="password-length-label" className="length-label">
         Character
       </label>
@@ -61,7 +61,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
         min="7"
         max="100"
         value={passwordLength || 7}
-        className="length-slider"
+        className="range-input"
         aria-labelledby="password-length-label"
         onChange={handleInputRangeChange}
       ></input>
@@ -70,7 +70,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
         min="7"
         max="100"
         value={passwordLength}
-        className="length-input"
+        className="number-input"
         aria-labelledby="password-length-label"
         onChange={handleInputNumberChange}
         onBlur={handleInputNumberBlur}

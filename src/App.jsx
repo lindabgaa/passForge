@@ -1,6 +1,9 @@
 // tools
 import { useState } from "react";
 
+// utils
+import { checkOption } from "./utils";
+
 // components
 import PasswordDisplay from "./components/PasswordDisplay/PasswordDisplay";
 import PasswordLength from "./components/PasswordLength/PasswordLength";
@@ -11,7 +14,8 @@ import "./App.css";
 
 export default function App() {
   const [copySuccess, setCopySuccess] = useState(null);
-  const [passwordLength, setPasswordLength] = useState(20);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [passwordLength, setPasswordLength] = useState(10);
   const [passwordOptions, setPasswordOptions] = useState([
     {
       id: "uppercase",
@@ -34,47 +38,148 @@ export default function App() {
     {
       id: "symbols",
       checked: true,
-      label: "Symbols (!?#@&*%$+)",
+      label: "Symbols(!?#@&*%$+)",
       disabled: false,
     },
   ]);
 
+  const updateStrengthIndicator = () => {
+    const hasUppercase = checkOption(passwordOptions, "uppercase");
+    const hasLowerCase = checkOption(passwordOptions, "lowercase");
+    const hasNumbers = checkOption(passwordOptions, "numbers");
+    const hasSymbols = checkOption(passwordOptions, "symbols");
+
+    if (
+      passwordLength > 18 &&
+      hasNumbers &&
+      hasSymbols &&
+      (hasUppercase || hasLowerCase)
+    ) {
+      setPasswordStrength("Very Strong");
+    } else if (
+      (passwordLength > 12 && hasNumbers && hasSymbols) ||
+      passwordLength > 25
+    ) {
+      setPasswordStrength("Strong");
+    } else if (
+      (passwordLength > 10 && (hasNumbers || hasSymbols)) ||
+      passwordLength > 15
+    ) {
+      setPasswordStrength("Moderate");
+    } else if (passwordLength < 10) {
+      setPasswordStrength("Very Weak");
+    } else {
+      setPasswordStrength("Weak");
+    }
+  };
+
   return (
     <main className="main-container">
-      <div className="content-wrapper">
-        <PasswordDisplay
-          setCopySuccess={setCopySuccess}
+      <PasswordDisplay
+        setCopySuccess={setCopySuccess}
+        passwordLength={passwordLength}
+        passwordOptions={passwordOptions}
+        updateStrengthIndicator={updateStrengthIndicator}
+      />
+
+      <div className="password-configuration-container">
+        <PasswordLength
           passwordLength={passwordLength}
-          passwordOptions={passwordOptions}
+          setPasswordLength={setPasswordLength}
         />
 
-        <div className="input-wrapper">
-          <PasswordLength
-            passwordLength={passwordLength}
-            setPasswordLength={setPasswordLength}
-          />
-          <PasswordOptions
-            passwordOptions={passwordOptions}
-            setPasswordOptions={setPasswordOptions}
-          />
+        <PasswordOptions
+          passwordOptions={passwordOptions}
+          setPasswordOptions={setPasswordOptions}
+        />
+
+        <div className="password-strength-container">
+          <div className="password-strength-bar">
+            <div
+              className={`strength-bar-segment ${
+                passwordStrength === "Very Weak"
+                  ? "very-weak"
+                  : passwordStrength === "Weak"
+                  ? "weak"
+                  : passwordStrength === "Moderate"
+                  ? "moderate"
+                  : passwordStrength === "Strong"
+                  ? "strong"
+                  : passwordStrength === "Very Strong"
+                  ? "very-strong"
+                  : ""
+              }`}
+            ></div>
+            <div
+              className={`strength-bar-segment ${
+                passwordStrength === "Weak"
+                  ? "weak"
+                  : passwordStrength === "Moderate"
+                  ? "moderate"
+                  : passwordStrength === "Strong"
+                  ? "strong"
+                  : passwordStrength === "Very Strong"
+                  ? "very-strong"
+                  : ""
+              }`}
+            ></div>
+            <div
+              className={`strength-bar-segment ${
+                passwordStrength === "Moderate"
+                  ? "moderate"
+                  : passwordStrength === "Strong"
+                  ? "strong"
+                  : passwordStrength === "Very Strong"
+                  ? "very-strong"
+                  : ""
+              }`}
+            ></div>
+            <div
+              className={`strength-bar-segment ${
+                passwordStrength === "Strong"
+                  ? "strong"
+                  : passwordStrength === "Very Strong"
+                  ? "very-strong"
+                  : ""
+              }`}
+            ></div>
+            <div
+              className={`strength-bar-segment ${
+                passwordStrength === "Very Strong" ? "very-strong" : ""
+              }`}
+            ></div>
+          </div>
+          <p
+            className={`password-strength-text ${
+              passwordStrength === "Very Weak"
+                ? "very-weak"
+                : passwordStrength === "Weak"
+                ? "weak"
+                : passwordStrength === "Moderate"
+                ? "moderate"
+                : passwordStrength === "Strong"
+                ? "strong"
+                : passwordStrength === "Very Strong"
+                ? "very-strong"
+                : ""
+            }`}
+          >
+            {passwordStrength}
+          </p>
         </div>
       </div>
 
-      <p
-        className={`copy-message ${
-          copySuccess === true
-            ? "copy-valid"
-            : copySuccess === false
-            ? "copy-error"
-            : ""
-        }`}
-      >
-        {copySuccess === true
-          ? "Copied generated password"
-          : copySuccess === false
-          ? " Failed to copy generated password. Please try again."
-          : ""}
-      </p>
+      <div className="copy-feedback-container">
+        {copySuccess === true && (
+          <p className="copy-success">Copied generated password</p>
+        )}
+
+        {copySuccess === false && (
+          <p className="copy-error">
+            Failed to copy generated password. Please try again.
+          </p>
+        )}
+      </div>
     </main>
   );
 }

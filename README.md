@@ -13,6 +13,8 @@ This project is a user-friendly password generator built with **JavaScript**, **
 - **One-click Copy**: Easily copy generated passwords.
 - **Responsive design**: Optimized for different screen sizes.
 - **Random Password Generation**: Unique and secure passwords every time.
+- **Password Visibility Toggle**: Option to hide or show the generated password for privacy.
+- **Security Level Indication**: Displays security levels (Weak, Moderate, Strong, Very Strong...).
 
 ## Tech Stack
 
@@ -37,8 +39,6 @@ This project is a user-friendly password generator built with **JavaScript**, **
 ## Usage
 
 ## Future Improvements
-
-- Add a visual feedback on password strength.
 
 ## Demo
 

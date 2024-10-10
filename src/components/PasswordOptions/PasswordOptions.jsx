@@ -2,6 +2,9 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 
+// utils
+import { checkOption } from "../../utils";
+
 // styles
 import "./PasswordOptions.css";
 
@@ -10,18 +13,10 @@ export default function PasswordOptions({
   setPasswordOptions,
 }) {
   // Get the checked (true / false) state of each option
-  // We don't need the 'symbols' option here
-  const uppercaseChecked = passwordOptions.find(
-    (option) => option.id === "uppercase"
-  ).checked;
-
-  const lowercaseChecked = passwordOptions.find(
-    (option) => option.id === "lowercase"
-  ).checked;
-
-  const numbersChecked = passwordOptions.find(
-    (option) => option.id === "numbers"
-  ).checked;
+  // We don't need the 'symbols' option here because it's not a requirement for the password
+  const uppercaseChecked = checkOption(passwordOptions, "uppercase");
+  const lowercaseChecked = checkOption(passwordOptions, "lowercase");
+  const numbersChecked = checkOption(passwordOptions, "numbers");
 
   // ---- Function to handle checkbox change
   const handleCheckboxChange = (index) => {

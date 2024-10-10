@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 // assets
 import copyIcon from "../../assets/copy-icon.svg";
 import generateIcon from "../../assets/generate-icon.svg";
+import hideIcon from "../../assets/hide-icon.svg";
 
 // utils
 import { shuffleArray } from "../../utils.js";
@@ -16,13 +17,13 @@ export default function PasswordDisplay({
   setCopySuccess,
   passwordLength,
   passwordOptions,
+  updateStrengthIndicator,
 }) {
-  // ---- Characters to generate password from
+  const [password, setPassword] = useState("");
+  const [isPasswordHidden, setIsPasswordHidden] = useState(false);
+
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?#@&*%$+";
-
-  // ---- State to store generated password
-  const [password, setPassword] = useState("");
 
   // ---- Function to generate password based on password length and options
   const generatePassword = useCallback(() => {
@@ -106,11 +107,6 @@ export default function PasswordDisplay({
     setPassword(generatedPassword);
   }, [passwordLength, passwordOptions]);
 
-  // ---- useEffect to generate password on initial render and when password length or options change
-  useEffect(() => {
-    generatePassword();
-  }, [generatePassword]);
-
   // ---- Function to handle generate password button click event
   const handleGenerateButtonClick = () => {
     generatePassword();
@@ -137,28 +133,43 @@ export default function PasswordDisplay({
     setTimeout(() => setCopySuccess(null), 3000);
   };
 
+  // ---- Function to handle hide password button click event
+  const handleHideButtonClick = () => {
+    setIsPasswordHidden(!isPasswordHidden);
+  };
+
+  // ---- useEffect to generate password on initial render and when password length or options change
+  useEffect(() => {
+    generatePassword();
+    updateStrengthIndicator();
+  }, [generatePassword, updateStrengthIndicator]);
+
   return (
-    <div className="password-wrapper">
+    <div className="password-display-container">
       <p className="password-text">
-        {password.split("").map(function (char, index) {
-          return (
+        {password.split("").map((char, index) => {
+          return isPasswordHidden ? (
+            "•"
+          ) : Number.isInteger(parseInt(char)) || /[!?%@#+$&*]/.test(char) ? (
             <span
               key={index}
-              className={`password-char
-                ${
-                  Number.isInteger(parseInt(char))
-                    ? "number"
-                    : /[!?%@#+$&*]/.test(char)
-                    ? "special"
-                    : ""
-                }
-              `}
+              className={
+                Number.isInteger(parseInt(char))
+                  ? "number"
+                  : /[!?%@#+$&*]/.test(char)
+                  ? "special"
+                  : ""
+              }
             >
               {char}
             </span>
+          ) : (
+            char
           );
         })}
       </p>
+
+      {/* Generate password button */}
       <button
         type="button"
         className="generate-button"
@@ -170,6 +181,17 @@ export default function PasswordDisplay({
           className="generate-icon"
         ></img>
       </button>
+
+      {/* Hide password button */}
+      <button
+        type="button"
+        className="hide-button"
+        onClick={handleHideButtonClick}
+      >
+        <img src={hideIcon} alt="Hide Password" className="hide-icon"></img>
+      </button>
+
+      {/* Copy password button */}
       <button
         type="button"
         className="copy-button"
@@ -193,4 +215,5 @@ PasswordDisplay.propTypes = {
       disabled: PropTypes.bool.isRequired,
     }).isRequired
   ).isRequired,
+  updateStrengthIndicator: PropTypes.func.isRequired,
 };

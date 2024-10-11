@@ -4,6 +4,10 @@ import { useCallback, useState } from "react";
 // utils
 import { checkOption } from "./utils";
 
+// assets
+import checkIcon from "./assets/check-icon.svg";
+import crossIcon from "./assets/cross-icon.svg";
+
 // components
 import PasswordDisplay from "./components/PasswordDisplay/PasswordDisplay";
 import PasswordLength from "./components/PasswordLength/PasswordLength";
@@ -12,6 +16,14 @@ import PasswordStrength from "./components/PasswordStrength/PasswordStrength";
 
 // styles
 import "./App.css";
+
+const PASSWORD_STRENGTH = {
+  VERY_WEAK: "Very Weak",
+  WEAK: "Weak",
+  MODERATE: "Moderate",
+  STRONG: "Strong",
+  VERY_STRONG: "Very Strong",
+};
 
 export default function App() {
   // states
@@ -47,14 +59,6 @@ export default function App() {
 
   // ---- Function to update the strength indicator based on the password length and character types (options)
   const updateStrengthIndicator = useCallback(() => {
-    const PASSWORD_STRENGTH = {
-      VERY_WEAK: "Very Weak",
-      WEAK: "Weak",
-      MODERATE: "Moderate",
-      STRONG: "Strong",
-      VERY_STRONG: "Very Strong",
-    };
-
     let score = 0;
 
     // Add points for length
@@ -79,6 +83,24 @@ export default function App() {
 
   return (
     <main className="main-container">
+      <div className="copy-feedback-container">
+        {copySuccess === true && (
+          <>
+            <img src={checkIcon} alt="" aria-hidden="true"></img>
+            <p className="copy-success-text">Copied generated password</p>
+          </>
+        )}
+
+        {copySuccess === false && (
+          <>
+            <img src={crossIcon} alt="" aria-hidden="true"></img>
+            <p className="copy-error-text">
+              Failed to copy generated password.
+            </p>
+          </>
+        )}
+      </div>
+
       <PasswordDisplay
         setCopySuccess={setCopySuccess}
         passwordLength={passwordLength}
@@ -98,18 +120,6 @@ export default function App() {
         />
 
         <PasswordStrength passwordStrength={passwordStrength} />
-      </div>
-
-      <div className="copy-feedback-container">
-        {copySuccess === true && (
-          <p className="copy-success">Copied generated password</p>
-        )}
-
-        {copySuccess === false && (
-          <p className="copy-error">
-            Failed to copy generated password. Please try again.
-          </p>
-        )}
       </div>
     </main>
   );

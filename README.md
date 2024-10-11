@@ -1,6 +1,6 @@
 # Password Generator - React/Vite project
 
-![Project Status](https://img.shields.io/badge/Project%20Status-In%20Progress-orange)
+![Project Status](https://img.shields.io/badge/Project%20Status-Finished-green)
 [![CodeFactor](https://www.codefactor.io/repository/github/lindabgaa/password-generator/badge)](https://www.codefactor.io/repository/github/lindabgaa/password-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 

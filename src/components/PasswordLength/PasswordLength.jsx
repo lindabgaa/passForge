@@ -55,6 +55,7 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
       <label id="password-length-label" className="length-label">
         Character
       </label>
+      <span className="show-on-mobile">{`(${passwordLength})`}</span>
       <input
         ref={rangeRef}
         type="range"

@@ -146,7 +146,7 @@ export default function PasswordDisplay({
 
   return (
     <div className="password-display-container">
-      <p className="password-text">
+      <p className={`password-text ${isPasswordHidden ? "hidden" : ""}`}>
         {password.split("").map((char, index) => {
           return isPasswordHidden ? (
             "•"

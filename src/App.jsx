@@ -1,5 +1,5 @@
 // tools
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 // utils
 import { checkOption } from "./utils";
@@ -8,13 +8,13 @@ import { checkOption } from "./utils";
 import PasswordDisplay from "./components/PasswordDisplay/PasswordDisplay";
 import PasswordLength from "./components/PasswordLength/PasswordLength";
 import PasswordOptions from "./components/PasswordOptions/PasswordOptions";
+import PasswordStrength from "./components/PasswordStrength/PasswordStrength";
 
 // styles
 import "./App.css";
 
 export default function App() {
-  const [copySuccess, setCopySuccess] = useState(null);
-  const [passwordStrength, setPasswordStrength] = useState("");
+  // states
   const [passwordLength, setPasswordLength] = useState(10);
   const [passwordOptions, setPasswordOptions] = useState([
     {
@@ -42,36 +42,40 @@ export default function App() {
       disabled: false,
     },
   ]);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [copySuccess, setCopySuccess] = useState(null);
 
-  const updateStrengthIndicator = () => {
-    const hasUppercase = checkOption(passwordOptions, "uppercase");
-    const hasLowerCase = checkOption(passwordOptions, "lowercase");
-    const hasNumbers = checkOption(passwordOptions, "numbers");
-    const hasSymbols = checkOption(passwordOptions, "symbols");
+  // ---- Function to update the strength indicator based on the password length and character types (options)
+  const updateStrengthIndicator = useCallback(() => {
+    const PASSWORD_STRENGTH = {
+      VERY_WEAK: "Very Weak",
+      WEAK: "Weak",
+      MODERATE: "Moderate",
+      STRONG: "Strong",
+      VERY_STRONG: "Very Strong",
+    };
 
-    if (
-      passwordLength > 18 &&
-      hasNumbers &&
-      hasSymbols &&
-      (hasUppercase || hasLowerCase)
-    ) {
-      setPasswordStrength("Very Strong");
-    } else if (
-      (passwordLength > 12 && hasNumbers && hasSymbols) ||
-      passwordLength > 25
-    ) {
-      setPasswordStrength("Strong");
-    } else if (
-      (passwordLength > 10 && (hasNumbers || hasSymbols)) ||
-      passwordLength > 15
-    ) {
-      setPasswordStrength("Moderate");
-    } else if (passwordLength < 10) {
-      setPasswordStrength("Very Weak");
-    } else {
-      setPasswordStrength("Weak");
-    }
-  };
+    let score = 0;
+
+    // Add points for length
+    if (passwordLength > 18) score += 3;
+    else if (passwordLength > 12) score += 2;
+    else if (passwordLength > 10) score += 1;
+
+    // Add points for character types
+    // checkOption verifies if a specific password option is enabled
+    if (checkOption(passwordOptions, "uppercase")) score += 1;
+    if (checkOption(passwordOptions, "lowercase")) score += 1;
+    if (checkOption(passwordOptions, "numbers")) score += 1;
+    if (checkOption(passwordOptions, "symbols")) score += 1;
+
+    // Determine strength based on the total score
+    if (score >= 6) setPasswordStrength(PASSWORD_STRENGTH.VERY_STRONG);
+    else if (score >= 5) setPasswordStrength(PASSWORD_STRENGTH.STRONG);
+    else if (score >= 4) setPasswordStrength(PASSWORD_STRENGTH.MODERATE);
+    else if (score >= 3) setPasswordStrength(PASSWORD_STRENGTH.WEAK);
+    else setPasswordStrength(PASSWORD_STRENGTH.VERY_WEAK);
+  }, [passwordOptions, passwordLength]);
 
   return (
     <main className="main-container">
@@ -93,80 +97,7 @@ export default function App() {
           setPasswordOptions={setPasswordOptions}
         />
 
-        <div className="password-strength-container">
-          <div className="password-strength-bar">
-            <div
-              className={`strength-bar-segment ${
-                passwordStrength === "Very Weak"
-                  ? "very-weak"
-                  : passwordStrength === "Weak"
-                  ? "weak"
-                  : passwordStrength === "Moderate"
-                  ? "moderate"
-                  : passwordStrength === "Strong"
-                  ? "strong"
-                  : passwordStrength === "Very Strong"
-                  ? "very-strong"
-                  : ""
-              }`}
-            ></div>
-            <div
-              className={`strength-bar-segment ${
-                passwordStrength === "Weak"
-                  ? "weak"
-                  : passwordStrength === "Moderate"
-                  ? "moderate"
-                  : passwordStrength === "Strong"
-                  ? "strong"
-                  : passwordStrength === "Very Strong"
-                  ? "very-strong"
-                  : ""
-              }`}
-            ></div>
-            <div
-              className={`strength-bar-segment ${
-                passwordStrength === "Moderate"
-                  ? "moderate"
-                  : passwordStrength === "Strong"
-                  ? "strong"
-                  : passwordStrength === "Very Strong"
-                  ? "very-strong"
-                  : ""
-              }`}
-            ></div>
-            <div
-              className={`strength-bar-segment ${
-                passwordStrength === "Strong"
-                  ? "strong"
-                  : passwordStrength === "Very Strong"
-                  ? "very-strong"
-                  : ""
-              }`}
-            ></div>
-            <div
-              className={`strength-bar-segment ${
-                passwordStrength === "Very Strong" ? "very-strong" : ""
-              }`}
-            ></div>
-          </div>
-          <p
-            className={`password-strength-text ${
-              passwordStrength === "Very Weak"
-                ? "very-weak"
-                : passwordStrength === "Weak"
-                ? "weak"
-                : passwordStrength === "Moderate"
-                ? "moderate"
-                : passwordStrength === "Strong"
-                ? "strong"
-                : passwordStrength === "Very Strong"
-                ? "very-strong"
-                : ""
-            }`}
-          >
-            {passwordStrength}
-          </p>
-        </div>
+        <PasswordStrength passwordStrength={passwordStrength} />
       </div>
 
       <div className="copy-feedback-container">

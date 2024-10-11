@@ -32,6 +32,7 @@ html {
 }
 
 body {
+  font-weight: 400;
   font-size: 1.6rem;
   font-family: "JetBrains Mono", monospace;
   background-color: var(--clr-white);

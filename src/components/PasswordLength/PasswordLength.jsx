@@ -1,12 +1,14 @@
 // tools
 import PropTypes from "prop-types";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // styles
 import "./PasswordLength.css";
 
 export default function PasswordLength({ passwordLength, setPasswordLength }) {
   const rangeRef = useRef(null);
+  const MIN_LENGTH = 7;
+  const MAX_LENGTH = 100;
 
   // ---- Function to handle range input change
   const handleInputRangeChange = (e) => {
@@ -15,16 +17,19 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
   };
 
   // ---- Function to update range progress
-  const updateRangeProgress = (value) => {
+  const updateRangeProgress = useCallback((value) => {
     const range = rangeRef.current;
-    const rangeProgress = (value / range.max) * 100;
-    range.style.background = `linear-gradient(to right, #0571ed ${rangeProgress}%, #e6e6e6 ${rangeProgress}%)`;
-  };
+    if (range) {
+      const rangeProgress =
+        ((value - MIN_LENGTH) / (MAX_LENGTH - MIN_LENGTH)) * 100;
+      range.style.background = `linear-gradient(to right, #0571ed ${rangeProgress}%, #e6e6e6 ${rangeProgress}%)`;
+    }
+  }, []);
 
   // ---- useEffect to update range progress on length change
   useEffect(() => {
     updateRangeProgress(passwordLength);
-  }, [passwordLength]);
+  }, [passwordLength, updateRangeProgress]);
 
   // ---- Function to handle number input change
   const handleInputNumberChange = (e) => {
@@ -59,19 +64,19 @@ export default function PasswordLength({ passwordLength, setPasswordLength }) {
       <input
         ref={rangeRef}
         type="range"
-        min="7"
-        max="100"
-        value={passwordLength || 7}
+        min={MIN_LENGTH}
+        max={MAX_LENGTH}
+        value={passwordLength || MIN_LENGTH}
         className="range-input"
         aria-labelledby="password-length-label"
         onChange={handleInputRangeChange}
       ></input>
       <input
         type="number"
-        min="7"
-        max="100"
+        min={MAX_LENGTH}
+        max={MIN_LENGTH}
         value={passwordLength}
-        className="number-input"
+        className="number-input hide-on-mobile"
         aria-labelledby="password-length-label"
         onChange={handleInputNumberChange}
         onBlur={handleInputNumberBlur}

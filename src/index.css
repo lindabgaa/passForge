@@ -37,8 +37,11 @@ body {
   font-family: "JetBrains Mono", monospace;
   background-color: var(--clr-white);
 
-  display: grid;
-  place-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
 }
 
 li {
